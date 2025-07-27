@@ -26,8 +26,9 @@ try {
 
     if ($reset) {
         echo "Suppression des tables existantes...\n";
-        $pdo->exec("DROP TABLE IF EXISTS request_logs CASCADE");
-        $pdo->exec("DROP TABLE IF EXISTS citoyens CASCADE");
+        $pdo->exec("DROP TABLE IF EXISTS achats CASCADE");
+        $pdo->exec("DROP TABLE IF EXISTS client CASCADE");
+        $pdo->exec("DROP TABLE IF EXISTS journal CASCADE");
         $pdo->exec("DROP FUNCTION IF EXISTS update_updated_at_column() CASCADE");
         echo "Tables supprimées.\n";
     }

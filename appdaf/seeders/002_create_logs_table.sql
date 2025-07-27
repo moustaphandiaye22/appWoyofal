@@ -1,4 +1,4 @@
--
+
 -- Seeders pour AppWoyofal
 -- Insertion de clients de test
 INSERT INTO client (nom, prenom, adresse, telephone, numerocompteur, solde_principal)

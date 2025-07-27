@@ -29,7 +29,13 @@ class Journal extends AbstractEntity{
         }
         $this->localisation = $localisation;
         $this->adresseIP = $adresseIP;
-        $this->status = $status;
+        if ($status instanceof \App\Entity\StatusEnum) {
+            $this->status = $status;
+        } elseif (is_string($status)) {
+            $this->status = \App\Entity\StatusEnum::from($status);
+        } else {
+            $this->status = \App\Entity\StatusEnum::success;
+        }
         $this->numerocompteur = $numerocompteur;
         $this->coderecharge = $coderecharge;
         $this->montantrecharge = $montantrecharge;
@@ -81,7 +87,13 @@ class Journal extends AbstractEntity{
         $this->adresseIP = $adresseIP;
     }
     public function setStatus($status){
-        $this->status = $status;
+        if ($status instanceof \App\Entity\StatusEnum) {
+            $this->status = $status;
+        } elseif (is_string($status)) {
+            $this->status = \App\Entity\StatusEnum::from($status);
+        } else {
+            $this->status = \App\Entity\StatusEnum::success;
+        }
     }
     public function setNumerocompteur($numerocompteur){
         $this->numerocompteur = $numerocompteur;
@@ -102,7 +114,7 @@ class Journal extends AbstractEntity{
             'dateheure' => $this->getDateheure() instanceof \DateTime ? $this->getDateheure()->format('Y-m-d H:i:s') : $this->getDateheure(),
             'localisation' => $this->getLocalisation(),
             'adresseIP' => $this->getAdresseIP(),
-            'status' => $this->getStatus(),
+            'status' => $this->getStatus() instanceof \App\Entity\StatusEnum ? $this->getStatus()->value : $this->getStatus(),
             'numerocompteur' => $this->getNumerocompteur(),
             'coderecharge' => $this->getCoderecharge(),
             'montantrecharge' => $this->getMontantrecharge(),
@@ -120,7 +132,7 @@ class Journal extends AbstractEntity{
             $tableau['dateheure'] ?? null,
             $tableau['localisation'] ?? '',
             $tableau['adresseIP'] ?? '',
-            $tableau['status'] ?? '',
+            isset($tableau['status']) ? \App\Entity\StatusEnum::from($tableau['status']) : \App\Entity\StatusEnum::success,
             $tableau['numerocompteur'] ?? '',
             $tableau['coderecharge'] ?? '',
             $tableau['montantrecharge'] ?? 0.0,

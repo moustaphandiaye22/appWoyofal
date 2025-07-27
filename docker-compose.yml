@@ -14,6 +14,7 @@ services:
       DB_PASSWORD: pgpassword
     volumes:
       - ./appdaf/public:/var/www/html/public
+      - ./appdaf/.env:/var/www/html/.env
     networks:
       - backend
     depends_on:

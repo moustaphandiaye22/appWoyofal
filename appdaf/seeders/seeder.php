@@ -26,8 +26,10 @@ try {
 
     if ($reset) {
         echo "Suppression des données existantes...\n";
-        $pdo->exec("TRUNCATE TABLE request_logs RESTART IDENTITY CASCADE");
-        $pdo->exec("TRUNCATE TABLE citoyens RESTART IDENTITY CASCADE");
+        $pdo->exec("TRUNCATE TABLE achat RESTART IDENTITY CASCADE");
+        $pdo->exec("TRUNCATE TABLE client RESTART IDENTITY CASCADE");
+        $pdo->exec("TRUNCATE TABLE journal RESTART IDENTITY CASCADE");
+
         echo "Données supprimées.\n";
     }
 

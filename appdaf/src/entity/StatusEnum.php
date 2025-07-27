@@ -6,4 +6,5 @@ enum StatusEnum: string
 {
     case success = 'success';
     case echec = 'echec';
+    case recherche = 'recherche';
 }
