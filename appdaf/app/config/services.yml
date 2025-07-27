@@ -1,0 +1,61 @@
+# Configuration des services AppWoyofal
+services:
+  # Repositories
+  repositories:
+    ClientRepository:
+      class: App\Repository\ClientRepository
+      singleton: true
+    AchatRepository:
+      class: App\Repository\AchatRepository
+      singleton: true
+    JournalRepository:
+      class: App\Repository\JournalRepository
+      singleton: true
+
+  # Services
+  services:
+    ClientService:
+      class: App\Service\ClientService
+      dependencies:
+        - ClientRepository
+      singleton: true
+    AchatService:
+      class: App\Service\AchatService
+      dependencies:
+        - ClientRepository
+        - AchatRepository
+        - JournalRepository
+      singleton: true
+    JournalService:
+      class: App\Service\JournalService
+      dependencies:
+        - JournalRepository
+      singleton: true
+
+  # Controllers
+  controllers:
+    ClientController:
+      class: App\Controller\ClientController
+      dependencies:
+        - ClientService
+      singleton: true
+    AchatController:
+      class: App\Controller\AchatController
+      dependencies:
+        - AchatService
+      singleton: true
+    JournalController:
+      class: App\Controller\JournalController
+      dependencies:
+        - JournalService
+      singleton: true
+
+database:
+  host: ${DB_HOST:localhost}
+  port: ${DB_PORT:5432}
+  name: ${DB_NAME:woyofal}
+  user: ${DB_USER:pguser}
+  password: ${DB_PASSWORD:pgpassword}
+
+api:
+  base_url: ${API_BASE_URL:http://localhost:8081}
