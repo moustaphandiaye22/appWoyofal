@@ -28,11 +28,9 @@ class App extends Singleton
         
         // Mapping des anciens noms vers les nouvelles classes
         $serviceMap = [
-            'CitoyenController' => \App\Controller\CitoyenController::class,
-            'CitoyenService' => \App\Service\CitoyenService::class,
-            'LoggerService' => \App\Service\LoggerService::class,
-            'CitoyenRepository' => \App\Repository\CitoyenRepository::class,
-            'LoggerRepository' => \App\Repository\LoggerRepository::class,
+            'AchatController' => \App\Controller\AchatController::class,
+            'ClientController' => \App\Controller\ClientController::class,
+            'JournalController' => \App\Controller\JournalController::class,
         ];
 
         $className = $serviceMap[$serviceName] ?? $serviceName;

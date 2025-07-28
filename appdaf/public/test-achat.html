@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Achat AppWoyofal</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🏪 Test Achat AppWoyofal</h1>
+    
+    <form id="achatForm">
+        <div class="form-group">
+            <label for="numerocompteur">Numéro de Compteur :</label>
+            <select id="numerocompteur" required>
+                <option value="">Choisir un compteur...</option>
+                <option value="COMP12345">COMP12345 - Dupont Jean (10000 FCFA)</option>
+                <option value="COMP67890">COMP67890 - NDAO Moussa (5000 FCFA)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="montant">Montant (FCFA) :</label>
+            <input type="number" id="montant" min="100" max="10000" step="100" value="1000" required>
+        </div>
+        
+        <button type="submit">💳 Effectuer l'Achat</button>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('achatForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const numerocompteur = document.getElementById('numerocompteur').value;
+            const montant = parseInt(document.getElementById('montant').value);
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<p>⏳ Traitement en cours...</p>';
+            
+            try {
+                const response = await fetch('/achat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        numerocompteur: numerocompteur,
+                        montant: montant
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.statut === 'success') {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h3>✅ Achat Réussi !</h3>
+                            <p><strong>Client :</strong> ${data.data.client}</p>
+                            <p><strong>Compteur :</strong> ${data.data.compteur}</p>
+                            <p><strong>Code de recharge :</strong> ${data.data.code}</p>
+                            <p><strong>kWh obtenus :</strong> ${data.data.nbreKwt} kWh</p>
+                            <p><strong>Prix unitaire :</strong> ${data.data.prix} FCFA/kWh</p>
+                            <p><strong>Tranche :</strong> ${data.data.tranche}</p>
+                            <p><strong>Référence :</strong> ${data.data.reference}</p>
+                            <p><strong>Date :</strong> ${data.data.date}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>❌ Erreur</h3>
+                            <p>${data.message}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Erreur de connexion</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

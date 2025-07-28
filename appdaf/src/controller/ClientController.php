@@ -27,14 +27,14 @@ class ClientController {
             );
             $result = $this->clientService->create($client);
             if ($result) {
-                return json_encode([
+                echo json_encode([
                     'data' => $client->toArray(),
                     'statut' => 'success',
                     'code' => 201,
                     'message' => 'Client créé avec succès'
                 ]);
             } else {
-                return json_encode([
+                echo json_encode([
                     'data' => null,
                     'statut' => 'error',
                     'code' => 500,
@@ -42,7 +42,7 @@ class ClientController {
                 ]);
             }
         } catch (Exception $e) {
-            return json_encode([
+            echo json_encode([
                 'data' => null,
                 'statut' => 'error',
                 'code' => 500,
@@ -52,26 +52,26 @@ class ClientController {
     }
 
     // Rechercher un client par numéro de compteur
-    public function chercherParCompteur($request) {
-        $numerocompteur = $request['numerocompteur'] ?? null;
+    public function chercherParCompteur($numerocompteur) {
         if (!$numerocompteur) {
-            return json_encode([
+            echo json_encode([
                 'data' => null,
                 'statut' => 'error',
                 'code' => 400,
                 'message' => 'Le numéro de compteur est obligatoire'
             ]);
+            return;
         }
         $client = $this->clientService->getByCompteur($numerocompteur);
         if ($client) {
-            return json_encode([
+            echo json_encode([
                 'data' => $client->toArray(),
                 'statut' => 'success',
                 'code' => 200,
                 'message' => 'Client trouvé'
             ]);
         } else {
-            return json_encode([
+            echo json_encode([
                 'data' => null,
                 'statut' => 'error',
                 'code' => 404,

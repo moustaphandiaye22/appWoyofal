@@ -17,8 +17,8 @@ class ClientRepository extends AbstractRepository  implements IClientRepository 
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':numerocompteur', $numerocompteur);
         $stmt->execute();
-        $result = $stmt->fetchObject(Client::class);
-        return $result ?: null;
+        $data = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $data ? Client::toObject($data) : null;
     }
 
     public function exists($numerocompteur) {
@@ -34,7 +34,7 @@ class ClientRepository extends AbstractRepository  implements IClientRepository 
             return 0;
         }
         try {
-            $query = "INSERT INTO client (nom, prenom, adresse, telephone, numerocompteur) VALUES (:nom, :prenom, :adresse, :telephone, :numerocompteur)";
+            $query = "INSERT INTO client (nom, prenom, adresse, telephone, numerocompteur, solde_principal) VALUES (:nom, :prenom, :adresse, :telephone, :numerocompteur, :soldePrincipal)";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute([
                 'nom' => $entity->getNom(),
@@ -42,6 +42,7 @@ class ClientRepository extends AbstractRepository  implements IClientRepository 
                 'adresse' => $entity->getAdresse(),
                 'telephone' => $entity->getTelephone(),
                 'numerocompteur' => $entity->getNumerocompteur(),
+                'soldePrincipal' => $entity->getSoldePrincipal(),
             ]);
             return $stmt->rowCount();
         } catch (PDOException $e) {
