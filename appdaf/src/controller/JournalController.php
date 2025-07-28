@@ -14,15 +14,20 @@ class JournalController {
 
     public function historique($request = []) {
         // Création d'un journal de recherche
-        $journal = new \App\Entity\Journal();
-        if (isset($request['numerocompteur'])) {
-            $journal->setNumerocompteur($request['numerocompteur']);
-        }
-        $journal->setDateheure(new \DateTime());
-        $journal->setStatus('recherche');
-        // Ajouter d'autres champs si besoin
+        $journal = new \App\Entity\Journal(
+            0, // id
+            new \DateTime(), // dateheure
+            '', // localisation
+            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', // adresseIP
+            $request['numerocompteur'] ?? '', // numerocompteur
+            '', // coderecharge
+            0.0, // montantrecharge
+            0.0, // nombreKwt
+            \App\Entity\StatusEnum::success // status
+        );
+        
         $this->journalService->enregistrer($journal);
-        return json_encode([
+        echo json_encode([
             'statut' => 'success',
             'code' => 200,
             'message' => 'Recherche journalisée avec succès'

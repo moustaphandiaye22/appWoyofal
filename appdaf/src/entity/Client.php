@@ -1,6 +1,6 @@
 <?php
 
-namespace App\entity;
+namespace App\Entity;
 
 use App\Core\Abstract\AbstractEntity;
 
@@ -92,7 +92,7 @@ class Client extends AbstractEntity {
             $tableau['adresse'] ?? '',
             $tableau['telephone'] ?? 0,
             $tableau['numerocompteur'] ?? '',
-            $tableau['soldePrincipal'] ?? 0.0
+            $tableau['soldePrincipal'] ?? $tableau['solde_principal'] ?? 0.0
         );
     }
         public function toJson(): string

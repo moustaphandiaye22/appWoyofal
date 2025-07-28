@@ -1,23 +1,24 @@
 <?php
 
-namespace App\entity;
+namespace App\Entity;
 
 use App\Core\Abstract\AbstractEntity;
+use App\Entity\StatusEnum;
 
-class Achat extends    AbstractEntity {
+class Achat extends AbstractEntity {
     private int $id;
     private string $reference;
-    private int $compteurnumero;
+    private string $compteurnumero;
     private string $coderecharge;
     private float $nombrekwh;
-    private float  $montant;
-    private int  $tranche;
+    private float $montant;
+    private int $tranche;
     private float $prixkwh;
     private \DateTime $dateachat;
-    private  string $statut;
+    private StatusEnum $statut;
 
 
-    public function __construct($id=0, $reference= '', $compteurnumero=0, $coderecharge='', $nombrekwh=0.0, $montant=0.0, $tranche=0, $prixkwh=0.0, $dateachat = null, $statut=StatusEnum::success)
+    public function __construct($id=0, $reference= '', $compteurnumero='', $coderecharge='', $nombrekwh=0.0, $montant=0.0, $tranche=0, $prixkwh=0.0, $dateachat = null, StatusEnum $statut = StatusEnum::success)
     {
         $this->id = $id;
         $this->reference = $reference;
@@ -34,7 +35,7 @@ class Achat extends    AbstractEntity {
         } else {
             $this->dateachat = new \DateTime();
         }
-        $this->statut =$statut;
+        $this->statut = $statut;
     }
     public function getId(){
         return $this->id;
@@ -98,7 +99,11 @@ class Achat extends    AbstractEntity {
         }
     }
     public function setStatut($statut){
-        $this->statut = $statut;
+        if ($statut instanceof StatusEnum) {
+            $this->statut = $statut;
+        } elseif (is_string($statut)) {
+            $this->statut = StatusEnum::from($statut);
+        }
     }
     public function toArray(): array
     { 
@@ -112,22 +117,23 @@ class Achat extends    AbstractEntity {
             'tranche' => $this->getTranche(),
             'prixkwh' => $this->getPrixkwh(),
             'dateachat' => $this->getDateachat() instanceof \DateTime ? $this->getDateachat()->format('Y-m-d H:i:s') : $this->getDateachat(),
-            'statut' => $this->getStatut(),
+            'statut' => $this->getStatut()->value,
         ];
     }
     public static function toObject(array $tableau): static
     {
+        $statut = isset($tableau['statut']) ? StatusEnum::from($tableau['statut']) : StatusEnum::success;
         return new static(
             $tableau['id'] ?? 0,
             $tableau['reference'] ?? '',
-            $tableau['compteurnumero'] ?? 0,
+            $tableau['compteurnumero'] ?? '',
             $tableau['coderecharge'] ?? '',
             $tableau['nombrekwh'] ?? 0.0,
             $tableau['montant'] ?? 0.0,
             $tableau['tranche'] ?? 0,
             $tableau['prixkwh'] ?? 0.0,
             $tableau['dateachat'] ?? null,
-            $tableau['statut'] ?? StatusEnum::success
+            $statut
         );
     }
     public function toJson(): string

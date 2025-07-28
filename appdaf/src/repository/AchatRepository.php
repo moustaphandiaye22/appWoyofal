@@ -35,7 +35,7 @@ class AchatRepository extends AbstractRepository implements IAchatRepository{
                 'tranche' => $entity->getTranche(),
                 'prixkwh' => $entity->getPrixkwh(),
                 'dateachat' => $entity->getDateachat() instanceof \DateTime ? $entity->getDateachat()->format('Y-m-d H:i:s') : $entity->getDateachat(),
-                'statut' => $entity->getStatut(),
+                'statut' => $entity->getStatut()->value,
             ]);
             return $stmt->rowCount();
         } catch (PDOException $e) {

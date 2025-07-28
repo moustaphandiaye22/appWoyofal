@@ -32,6 +32,8 @@ class Router extends Singleton
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
 
+
+
         // Charger dynamiquement les routes à chaque requête
         $routes = require dirname(__DIR__, 2) . '/routes/route.web.php';
         foreach ($routes as $route) {
@@ -50,12 +52,21 @@ class Router extends Singleton
                 if (isset($route['controller']) && isset($route['action'])) {
                     $controller = \App\Core\App::get($route['controller']);
                     $params = [];
-                    // Extraire les paramètres nommés
+                    
+                    // Extraire les paramètres nommés de l'URL d'abord
                     foreach ($matches as $key => $value) {
                         if (!is_int($key)) {
                             $params[] = $value;
                         }
                     }
+                    
+                    // Pour les requêtes POST, ajouter les données JSON en premier
+                    if ($method === 'POST') {
+                        $input = json_decode(file_get_contents('php://input'), true) ?: [];
+                        array_unshift($params, $input);
+                    }
+
+                    
                     call_user_func_array([$controller, $route['action']], $params);
                     return;
                 }

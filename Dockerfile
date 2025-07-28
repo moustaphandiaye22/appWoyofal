@@ -14,13 +14,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copier les fichiers de configuration Composer en premier
-COPY composer.json composer.lock ./
+COPY appdaf/composer.json appdaf/composer.lock ./
 
 # Installer les dépendances PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Copier le reste du code source
-COPY . .
+COPY appdaf/ .
 
 # Exposer le port
 EXPOSE $PORT

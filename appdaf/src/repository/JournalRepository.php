@@ -15,7 +15,7 @@ class JournalRepository extends AbstractRepository  implements IJournalRepositor
                 'dateheure' => $journal->getDateheure()->format('Y-m-d H:i:s'),
                 'localisation' => $journal->getLocalisation(),
                 'adresseIP' => $journal->getAdresseIP(),
-                'status' => $journal->getStatus(),
+                'status' => $journal->getStatus()->value,
                 'numerocompteur' => $journal->getNumerocompteur(),
                 'coderecharge' => $journal->getCoderecharge(),
                 'montantrecharge' => $journal->getMontantrecharge(),

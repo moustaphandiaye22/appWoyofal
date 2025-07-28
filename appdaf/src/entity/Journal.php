@@ -1,6 +1,6 @@
 <?php
 
-namespace App\entity;
+namespace App\Entity;
 
 use App\Core\Abstract\AbstractEntity;
 use App\Entity\StatusEnum;
@@ -17,7 +17,7 @@ class Journal extends AbstractEntity{
     private float $montantrecharge;
     private float $nombreKwt;
 
-    public function __construct($id=0, $dateheure=null, $localisation='', $adresseIP='', $status=StatusEnum::success, $numerocompteur='', $coderecharge='', $montantrecharge=0.0, $nombreKwt=0.0)
+    public function __construct($id=0, $dateheure=null, $localisation='', $adresseIP='', $numerocompteur='', $coderecharge='', $montantrecharge=0.0, $nombreKwt=0.0, StatusEnum $status = StatusEnum::success)
     {
         $this->id = $id;
         if ($dateheure instanceof \DateTime) {
@@ -29,13 +29,7 @@ class Journal extends AbstractEntity{
         }
         $this->localisation = $localisation;
         $this->adresseIP = $adresseIP;
-        if ($status instanceof \App\Entity\StatusEnum) {
-            $this->status = $status;
-        } elseif (is_string($status)) {
-            $this->status = \App\Entity\StatusEnum::from($status);
-        } else {
-            $this->status = \App\Entity\StatusEnum::success;
-        }
+        $this->status = $status;
         $this->numerocompteur = $numerocompteur;
         $this->coderecharge = $coderecharge;
         $this->montantrecharge = $montantrecharge;
@@ -87,12 +81,10 @@ class Journal extends AbstractEntity{
         $this->adresseIP = $adresseIP;
     }
     public function setStatus($status){
-        if ($status instanceof \App\Entity\StatusEnum) {
+        if ($status instanceof StatusEnum) {
             $this->status = $status;
         } elseif (is_string($status)) {
-            $this->status = \App\Entity\StatusEnum::from($status);
-        } else {
-            $this->status = \App\Entity\StatusEnum::success;
+            $this->status = StatusEnum::from($status);
         }
     }
     public function setNumerocompteur($numerocompteur){
@@ -114,7 +106,7 @@ class Journal extends AbstractEntity{
             'dateheure' => $this->getDateheure() instanceof \DateTime ? $this->getDateheure()->format('Y-m-d H:i:s') : $this->getDateheure(),
             'localisation' => $this->getLocalisation(),
             'adresseIP' => $this->getAdresseIP(),
-            'status' => $this->getStatus() instanceof \App\Entity\StatusEnum ? $this->getStatus()->value : $this->getStatus(),
+            'status' => $this->status->value,
             'numerocompteur' => $this->getNumerocompteur(),
             'coderecharge' => $this->getCoderecharge(),
             'montantrecharge' => $this->getMontantrecharge(),
@@ -127,12 +119,13 @@ class Journal extends AbstractEntity{
     }
     public static function toObject(array $tableau): static
     {
+        $status = isset($tableau['status']) ? StatusEnum::from($tableau['status']) : StatusEnum::success;
         return new static(
             $tableau['id'] ?? 0,
             $tableau['dateheure'] ?? null,
             $tableau['localisation'] ?? '',
             $tableau['adresseIP'] ?? '',
-            isset($tableau['status']) ? \App\Entity\StatusEnum::from($tableau['status']) : \App\Entity\StatusEnum::success,
+            $status,
             $tableau['numerocompteur'] ?? '',
             $tableau['coderecharge'] ?? '',
             $tableau['montantrecharge'] ?? 0.0,

@@ -1,0 +1,59 @@
+### Test API AppWoyofal
+
+### 1. Vérifier que l'API fonctionne
+GET http://localhost:8082/health
+
+### 2. Rechercher un client
+GET http://localhost:8082/client/COMP12345
+
+### 3. Achat 5000 FCFA (Tranche 1)
+POST http://localhost:8082/achat
+Content-Type: application/json
+
+{
+  "numerocompteur": "COMP12345",
+  "montant": 5000
+}
+
+### 4. Achat 15000 FCFA (Tranche 2)
+POST http://localhost:8082/achat
+Content-Type: application/json
+
+{
+  "numerocompteur": "COMP12345", 
+  "montant": 15000
+}
+
+### 5. Achat 30000 FCFA (Tranche 3)
+POST http://localhost:8082/achat
+Content-Type: application/json
+
+{
+  "numerocompteur": "COMP67890",
+  "montant": 30000
+}
+
+### 6. Test avec compteur inexistant
+POST http://localhost:8082/achat
+Content-Type: application/json
+
+{
+  "numerocompteur": "INEXISTANT",
+  "montant": 1000
+}
+
+### 7. Consulter l'historique
+GET http://localhost:8082/journal
+
+### 8. Créer un nouveau client
+POST http://localhost:8082/clients
+Content-Type: application/json
+
+{
+  "nom": "FALL",
+  "prenom": "Fatou",
+  "adresse": "Thies", 
+  "telephone": "775123456",
+  "numerocompteur": "COMP99999",
+  "soldePrincipal": 25000
+}

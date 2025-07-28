@@ -13,7 +13,7 @@ services:
       DB_USER: pguser
       DB_PASSWORD: pgpassword
     volumes:
-      - ./appdaf/public:/var/www/html/public
+      - ./appdaf:/var/www/html
       - ./appdaf/.env:/var/www/html/.env
     networks:
       - backend

@@ -26,7 +26,7 @@ return [
     // Recherche client par numéro de compteur
     [
         'method' => 'GET',
-        'path' => '/client',
+        'path' => '/client/{compteur}',
         'controller' => 'ClientController',
         'action' => 'chercherParCompteur'
     ],
